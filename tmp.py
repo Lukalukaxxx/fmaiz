@@ -21,3 +21,5 @@ print(driver.find_element_by_name('t2').get_attribute('value'))
 
 sleep(2)
 driver.quit()
+
+wtf only used here

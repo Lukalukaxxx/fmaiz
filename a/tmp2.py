@@ -23,3 +23,4 @@ sleep(2)
 driver.quit()
 
 wtf only used here
+now is a little better

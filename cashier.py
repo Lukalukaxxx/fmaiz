@@ -46,9 +46,9 @@ def print_help():
     print("~~~~~~~~~~~~ Instructions ~~~~~~~~~~~~")
     print("     [name] | [description]")
     print("       add  | add/update a product to system")
-    print("       del  | del a product from system")
+    print("    rm/del  | del a product from system")
     print("       cal  | begin to account")
-    print("       dis  | display all products")
+    print("    ls/dis  | display all products")
     print("    q/exit  | quit")
     print("     (input 'help [name]' for details) \n")
 
@@ -70,7 +70,7 @@ def add(ID, name, price):
         print("-----[ID] [price] must be numbers-----")
         return
     if ID in product_list.keys():
-        print('-'*10+"This ID has already marked", end=' ')
+        print('-'*10+"ID[{0}] has already marked".format(ID), end=' ')
         print(product_list[ID])
         jud = input('-'*10+"Are you sure to change it?(y/n)")
         while(not jud in ['y','n','']):
@@ -122,7 +122,7 @@ def print_list(order):
 def print_receipt(order):
     T = datetime.now()
     receiptfile = str(T.year)+'-'+str(T.month)+'-'+str(T.day)
-    receiptfile += '_[{0}:{1}:{2}].txt'.format(T.hour,T.minute,T.second)
+    receiptfile += '_[{0}-{1}-{2}].txt'.format(T.hour,T.minute,T.second)
     with open(receiptfile, "w") as f:
         tmp = f.write("Record time: "+str(T)+'\n\n')
         tmp = f.write(" Shopping list:")
@@ -131,7 +131,7 @@ def print_receipt(order):
             sum += product_list[i].price
             tmp = f.write('%16d'%i,end='  |  ')
             f.write(product_list[i]+'\n')
-        f.write('\n'+' '*18+'total: ￥', sum)
+        f.write('\n'+' '*18+'total: ￥ '+str(sum))
     print(" Successfully print your receipt to ["+receiptfile+']')
 
 def receipt(order):
@@ -153,10 +153,10 @@ def cal():
         input 'q'or'done' to finish and choose to print receipt or not'''
     print("\n Begin to calculate cost:\n")
     cart = {}
-    cmds = ['b', 'del', 'clear', 'q', 'done', 'help']
+    cmds = ['b', 'del', 'rm', 'clear', 'q', 'done', 'help']
+    order = []
     while(True):
         cmd = input(" >>>Input:").split()
-        order = []
         Len = len(cmd)
         if not Len: continue
         if cmd[0] in cmds:
@@ -170,7 +170,7 @@ def cal():
                 del order[-1]
                 print_list(order)
                 continue
-            if cmd[0] == 'del':
+            if cmd[0] in ['del','rm']:
                 if Len > 2:
                     invalid()
                     continue
@@ -200,26 +200,32 @@ def cal():
                 receipt(order)
                 return
             if cmd[0] == 'help':
-                print('''
-                        input [ID] directly to add a product into bill
-                        input 'b' to remove the previous product you added
-                        input 'del [ID]' to remove a definite product product you added
-                        input 'clear' to empty the bill
-                        input 'q'or'done' to finish and choose to print receipt or not''')
+                print(''' 
+  input [ID] directly to add a product into bill
+  input 'b' to remove the previous product you added
+  input 'del/rm [ID]' to remove a definite product product you added
+  input 'clear' to empty the bill
+  input 'q'or'done' to finish and choose to print receipt or not
+                ''')
+                continue
         if Len > 1:
             invalid()
             continue
         addID = 19990523
         try:
             addID = int(cmd[0])
-            order.append(addID)
         except ValueError:
             print('-'*10+"[ID] must be numbers"+'-'*10)
+        if not addID in product_list.keys():
+            print('-'*10+"This is no such product [{0}]".format(addID))
+            continue
+        order.append(addID)
+        print_list(order)
 
 def main():
     # no output is the best !
     print_help()
-    cmds = ['q', 'exit', 'add', 'del', 'cal', 'dis', 'help']
+    cmds = ['q', 'exit', 'add', 'del', 'rm', 'cal', 'dis', 'ls', 'help']
     while(True):
         cmd = input(">>>Input: ").split()
         if not len(cmd): continue
@@ -236,36 +242,36 @@ def main():
                  add(*(cmd[1:]))
             except TypeError:
                 invalid()
-                continue
-        if cmd[0] == cmds[3]:
+            continue
+        if cmd[0] in cmds[3:5]:
             try:
                 rm(*(cmd[1:]))
             except TypeError:
                 invalid()
-                continue
-        if cmd[0] == cmds[4]:
+            continue
+        if cmd[0] == cmds[5]:
             try:
                 cal(*(cmd[1:]))
             except TypeError:
                 invalid()
-                continue
-        if cmd[0] == cmds[5]:
+            continue
+        if cmd[0] in cmds[6:8]:
             try:
                 dis(*(cmd[1:]))
             except TypeError:
                 invalid()
-                continue
-        if cmd[0] == cmds[6]:
+            continue
+        if cmd[0] == cmds[8]:
             if len(cmd) == 1:
                 print_help()
                 continue
             if len(cmd) > 2 or not cmd[1] in cmds[2:]:
                 invalid()
                 continue
-            if cmd[1] == 'del': help(rm)
             if cmd[1] == 'add': help(add)
             if cmd[1] == 'cal': help(cal)
-            if cmd[1] == 'dis': help(dis)
+            if cmd[1] in ['del','rm']: help(rm)
+            if cmd[1] in ['dis','ls']: help(dis)
 
 if __name__ == "__main__":
     main()

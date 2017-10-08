@@ -21,7 +21,7 @@ if __name__ == "__main__":
     print("="*40)
     print("#"+" "*5+"Welcome to Casher System v1.0"+" "*4+"#")
     print("#"+" "*5+"Author: Sky"+" "*22+"#")
-    print("#"+" "*5+"Release Date: 10-6"+" "*15+"#")
+    print("#"+" "*5+"Release Date: 10-8"+" "*15+"#")
     print("="*40) 
     print()
 
@@ -123,7 +123,7 @@ def print_receipt(order):
     T = datetime.now()
     receiptfile = str(T.year)+'-'+str(T.month)+'-'+str(T.day)
     receiptfile += '_[{0}:{1}:{2}].txt'.format(T.hour,T.minute,T.second)
-    with open(receiptfile "w") as f:
+    with open(receiptfile, "w") as f:
         tmp = f.write("Record time: "+str(T)+'\n\n')
         tmp = f.write(" Shopping list:")
         sum = 0

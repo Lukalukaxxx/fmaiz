@@ -1,0 +1,243 @@
+
+header{
+    min-width: 950px;
+}
+
+body{
+    padding: 0;
+    margin: 0;
+}
+
+#logo{
+    display: inline-block;
+    font-size: 28px;
+    text-decoration: none;    
+    line-height: 40px;
+    color: #2c3e50;
+    font-family: "Dosis", "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+    font-weight: 430;
+    margin-left: 4%;
+    margin-top: 6px;
+}
+
+#mainlist{
+    float: right;
+    color: rgb(119,119,119);
+}
+
+#mainlist input{
+    height: 30px;
+    line-height: 30px;
+    box-sizing: border-box;
+    padding: 0 15px 0 30px;
+    border: 1px solid #e3e3e3;
+    color: #2c3e50;
+    outline: none;
+    border-radius: 15px;
+    margin-right: 10px;
+    transition: border-color 0.2s ease;
+    background: #fff;
+    background-size: 20px;
+    vertical-align: middle !important;
+}
+
+#mainlist input:focus{
+    border-color: #42b983;
+}
+
+#mainlist li{
+    display: inline-block;
+    margin-right: 30px;
+}
+
+#mainlist a{
+    text-decoration: none;    
+    color: rgb(119,119,119);
+    border-bottom-style: solid;
+    border-bottom-color: white;
+}
+
+#mainlist a:hover{
+    border-bottom-color: rgb(66,185,131);
+    border-bottom-width: 5px;
+}
+
+.dropdown{
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content{
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+}
+
+.dropdown-content a{
+    text-decoration: none;    
+    border-bottom-width: 0 !important;
+}    
+.dropdown-content a:hover{
+    color: rgb(66,185,131) !important;
+}    
+
+.dropdown:hover .dropdown-content{
+    display: block;
+}
+
+.dropdown-subcontent{
+    margin: 2px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+hr{
+    size: 2px;
+    width: 100%;
+    margin: 3px, 0;
+}
+
+/* 使用padding可以模仿一下原网页小屏居中 */
+#midtitle{
+    margin-top: 50px;
+    min-width: 1100px;
+    height: 250px;
+}
+
+#mainlogo{
+    float: left;
+    margin-left: 400px;
+}
+
+#mainlogo img{
+    width: 215px;
+    height: 215px;
+}
+
+#midtitle h1{
+    font-weight: 300;
+    margin: 0;
+    font-size: 3.2em;
+}
+
+#midtitle h2{
+    font-family: "Dosis", "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+    font-weight: 500;
+    font-size: 2.4em;
+    margin: 0 0 10px;
+    display: none;
+}
+
+#midwords{
+    margin-left: 50px;
+    float: left;
+}
+
+#buttons a{
+    text-decoration: none;
+    display: inline-block;
+}
+
+.button{
+    padding: 0.75em 2em;
+    border-radius: 2em;
+    display: inline-block;
+    color: #4fc08d;
+    background-color: #fff;
+    transition: all 0.15s ease;
+    box-sizing: border-box;
+    border: 1px solid #4fc08d;
+    margin: 0 20px;
+}
+
+.green{
+    color: #fff !important;
+    background-color: #4fc08d !important;
+}
+
+#labels{
+    margin: 50px 0;
+    height: 200px;
+    min-width: 1000px;
+    width: 100%;
+    float: left;
+}
+
+#labels div{
+    width: 300px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    position: relative;
+    left: 20%;
+}
+
+#labels h5{
+    color: rgb(66,185,147);
+    font-size: 23px;
+    font-weight: 400;
+    margin: 0;
+}
+
+#labels p{
+    color: rgb(119,119,119);
+}
+
+#supports{
+    margin-top: 250px;
+    padding-top: 20px;
+    text-align: center;
+    background-color: #f6f6f6;
+}
+
+#supports h2{
+    font-size: 16px;
+    color: rgb(146, 145, 145);
+}
+
+#supports a, img{
+  width: 100px;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 5px 5px;
+}
+
+#supports img{
+    transition: all 0.3s ease;
+    filter: grayscale(100%);
+    opacity: 0.66;
+} 
+
+#supports img:hover{
+    filter: none;
+    opacity: 1;
+}
+
+#to_support a{
+    margin-top: 20px;
+    font-size: 0.9em;
+    font-weight: 700;
+    width: auto;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+#advanced_support h3,h4{
+    font-size: 14px;
+    color: rgb(146, 145, 145);
+}
+
+footer{
+    padding: 50px 0;
+    color: #fff;
+    background-color: rgb(114,127,128);
+    text-align: center;
+}
+
+footer a{
+    text-decoration: none;
+    font-weight: 600;
+    color: #fff;
+}

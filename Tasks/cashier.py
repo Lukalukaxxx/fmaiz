@@ -44,13 +44,18 @@ del f
 
 def print_help():
     print("~~~~~~~~~~~~ Instructions ~~~~~~~~~~~~")
-    print("     [name] | [description]")
-    print("       add  | add/update a product to system")
-    print("    rm/del  | del a product from system")
-    print("       cal  | begin to account")
-    print("    ls/dis  | display all products")
-    print("    q/exit  | quit")
-    print("     (input 'help [name]' for details) \n")
+    print("   add     add/update a product to system")
+    print("   rm/del  delete a product from system")
+    print("   cal     begin to account")
+    print("   ls/dis  display all products in system")  
+    print("   q/exit  quit the system")
+    print("\nEXAMPLES:")
+    print("         add 19990913 sky 999")
+    print("          rm 19990913")
+    print("         cal (no parameter needed)")
+    print("          ls (no parameter needed)")
+    print("           q (no parameter needed)")
+    print("    (input just like 'help add' for details) \n")
 
 def save():
     with open(".pdlist_tmp", "wb") as f:
@@ -61,8 +66,7 @@ def save():
 def add(ID, name, price):
     '''You can add info of a product by input:
     add [ID] [name] [price] ([ID] [price] must be numbers)
-    [ID] is unique, so if you input an existing ID, other info \
-    will be updated'''
+    [ID] is unique, so if you input an existing ID, other info will be updated'''
     try:
         tmp = int(ID)
         price = int(price)
@@ -110,16 +114,18 @@ def dis():
 def invalid():
     print('-'*5+"Invalid instruction. TRY 'help'"+'-'*5)
 
-def print_list(order):
+def print_list(cart):
     sum = 0
-    print('\n'+' '*12+'{Shopping Bag}')
-    for i in order:
-        sum += product_list[i].price
+    print('\n'+' '*12+'{Shopping list}')
+    for i in cart:
+        sum += product_list[i].price*cart[i]
         print('%16s'%i,end='  |  ')
-        print(product_list[i])
+        print(product_list[i], end='')
+        if cart[i] != 1: print(" x%d"%cart[i]) 
+        else: print()
     print('\n'+' '*18+'total: $', sum)
 
-def print_receipt(order):
+def print_receipt(cart):
     T = datetime.now()
     receiptfile = str(T.year)+'-'+str(T.month)+'-'+str(T.day)
     receiptfile += '_[{0}-{1}-{2}].txt'.format(T.hour,T.minute,T.second)
@@ -127,103 +133,89 @@ def print_receipt(order):
         tmp = f.write("Record time: "+str(T)+'\n\n')
         tmp = f.write(" Shopping list:\n")
         sum = 0
-        for i in order:
-            sum += product_list[i].price
+        for i in cart:
+            sum += product_list[i].price*cart[i]
             tmp = f.write(str('%16s'%i)+'  |  ')
-            tmp = f.write(str(product_list[i])+'\n')
+            tmp = f.write(str(product_list[i]))
+            if cart[i] != 1: tmp = f.write(str(" x%d"%cart[i]))
+            tmp = f.write('\n')
         tmp = f.write('\n'+' '*18+'total: $ '+str(sum))
     print(" Successfully print your receipt to ["+receiptfile+']')
 
-def receipt(order):
+def receipt(cart):
     cmd = input(' Successfully Billing. Do you want a RECEIPT?(y/n)')
     print(' '+'-'*50)
     while(not cmd in ['y','n','']):
         cmd = input(" Please input 'y' or 'n' to print receipt or not.(y/n)")
     if cmd != 'n':
-        print_receipt(order)
+        print_receipt(cart)
     print(" Thanks for use. You can donate to Alipay: 17733099176")
 
 def cal():
     '''Begin to calculate the cost.
     No any parameter needed.
-    When start it:
-        input [ID] directly to add a product into bill
-        input 'b' to remove the previous product you added
-        input 'del [ID]' to remove a definite product product you added
-        input 'clear' to empty the bill
-        input 'q'or'done' to finish and choose to print receipt or not'''
-    print("\n Begin to calculate cost:\n")
+    When start it, you can:
+
+        1.input [ID] directly to add one product to cart
+        2.input [ID] [numbers] to add several products to cart
+        3.input 'rm [ID] [numbers] to remove products from cart
+        4.input 'q' to finish to finish and choose to print receipt or not
+
+    (If you still do not understand, input 'example' to get examples)'''
+
+    print("\n Begin to calculate cost:")
+    print("     (If you can not use it, try 'help')\n")
+    cmds = ['rm', 'q', 'help', 'example']
     cart = {}
-    cmds = ['b', 'del', 'rm', 'clear', 'q', 'done', 'help']
-    order = []
     while(True):
         cmd = input(" >>>Input:").split()
         Len = len(cmd)
         if not Len: continue
         if cmd[0] in cmds:
-            if cmd[0] == 'b':
-                if Len > 1:
-                    invalid()
-                    continue
-                if len(order) < 1:
-                    print('-'*10+"Your bag is empty now!"+'-'*10)
-                    continue
-                del order[-1]
-                print_list(order)
-                continue
-            if cmd[0] in ['del','rm']:
-                if Len > 2:
-                    invalid()
-                    continue
-                delID = '19990801'
+            if cmd[0] == 'rm':
+                if Len != 3: invalid(); continue
+                rm_ID = cmd[1]
                 try:
-                    tmp = int(cmd[1])
-                    delID = cmd[1]
+                    tmp = int(rm_ID)
+                    rmnum = int(cmd[2])
                 except ValueError:
-                    print('-'*10+"[ID] must be numbers"+'-'*10)
+                    print('-'*6+"[ID] [numbers] must be numbers"+'-'*6)
                     continue
-                if not delID in order:
-                    print('\n'+'-'*10+"Your bag has no this!"+'-'*10+'\n')
-                    print_list(order)
-                    print('\n'+'-'*10+"Your bag has no this!"+'-'*10+'\n')
+                if not rm_ID in cart.keys():
+                    print('-'*10+"Your cart has no this"+'-'*10)
                     continue
-                order.remove(delID)
-                print_list(order)
-            if cmd[0] == 'clear':
-                if Len > 1:
-                    invalid()
+                if cart[rm_ID] < rmnum:
+                    print('-'*7+"Your cart has no enough this"+'-'*7)
                     continue
-                order = []
-                print_list(order)
-            if cmd[0] in ['q','done']:
-                if Len > 1:
-                    invalid()
-                    continue
-                receipt(order)
+                cart[rm_ID] -= rmnum
+                if cart[rm_ID] == 0: del cart[rm_ID]
+                print_list(cart)
+            elif cmd[0] == 'q':
+                if Len > 1: invalid(); continue
+                receipt(cart)
                 return
-            if cmd[0] == 'help':
-                print(''' 
-  input [ID] directly to add a product into bill
-  input 'b' to remove the previous product you added
-  input 'del/rm [ID]' to remove a definite product product you added
-  input 'clear' to empty the bill
-  input 'q'or'done' to finish and choose to print receipt or not
-                ''')
-                continue
-        if Len > 1:
-            invalid()
-            continue
-        addID = '19990523'
-        try:
-            tmp = int(cmd[0])
+            elif cmd[0] == 'help':
+                if Len > 1: invalid(); continue
+                help(cal)
+            elif cmd[0] == 'example':
+                if Len > 1: invalid(); continue
+                print("     1.   19990523")
+                print("     2.   19990801 88")
+                print("     3.   rm 19990801 88")
+                print("     4.   q (no parameter needed)")
+        else:
+            if Len > 2: invalid(); continue
             addID = cmd[0]
-        except ValueError:
-            print('-'*10+"[ID] must be numbers"+'-'*10)
-        if not addID in product_list.keys():
-            print('-'*10+"This is no such product [{0}]".format(addID))
-            continue
-        order.append(addID)
-        print_list(order)
+            try:
+                tmp = int(cmd[0])
+                if Len == 2: num = int(cmd[1])
+                else: num = 1
+            except ValueError:
+                print('-'*6+"[ID] [numbers] must be numbers"+'-'*6)
+                continue
+            if addID in cart.keys(): cart[addID] += num
+            else: cart[addID] = num
+            print_list(cart)
 
 def main():
     # no output is the best !

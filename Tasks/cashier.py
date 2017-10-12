@@ -7,14 +7,14 @@ from datetime import datetime
 
 class Things(object):
     '''A product info recoder:
-    [product ID] [product name] [price]'''
+    [product name] [price]'''
 
     def __init__(self, name, price):
         self.name = name
         self.price = price
 
     def __repr__(self):
-        return str('￥'+str("%4d "%self.price)+self.name)
+        return str('$'+str("%4d "%self.price)+self.name)
 
 if __name__ == "__main__":
     print()
@@ -64,7 +64,7 @@ def add(ID, name, price):
     [ID] is unique, so if you input an existing ID, other info \
     will be updated'''
     try:
-        ID = int(ID)
+        tmp = int(ID)
         price = int(price)
     except ValueError:
         print("-----[ID] [price] must be numbers-----")
@@ -86,7 +86,7 @@ def rm(ID):
     '''You can remove a info of a product by input:
     rm [ID] (must be [ID], because name is not unique!)'''
     try:
-        ID = int(ID)
+        tmp = int(ID)
     except ValueError:
         print("-----[ID] [price] must be numbers-----")
         return
@@ -103,7 +103,7 @@ def dis():
     print('\n'+' '*12+"[ID]  |  [price] [name]")
     for i in product_list:
         cnt += 1
-        print('%16d'%i,end='  |  ')
+        print('%16s'%i,end='  |  ')
         print(product_list[i])
     print('\n'+' '*18+'total:', cnt)
     
@@ -115,9 +115,9 @@ def print_list(order):
     print('\n'+' '*12+'{Shopping Bag}')
     for i in order:
         sum += product_list[i].price
-        print('%16d'%i,end='  |  ')
+        print('%16s'%i,end='  |  ')
         print(product_list[i])
-    print('\n'+' '*18+'total: ￥', sum)
+    print('\n'+' '*18+'total: $', sum)
 
 def print_receipt(order):
     T = datetime.now()
@@ -125,17 +125,18 @@ def print_receipt(order):
     receiptfile += '_[{0}-{1}-{2}].txt'.format(T.hour,T.minute,T.second)
     with open(receiptfile, "w") as f:
         tmp = f.write("Record time: "+str(T)+'\n\n')
-        tmp = f.write(" Shopping list:")
+        tmp = f.write(" Shopping list:\n")
         sum = 0
         for i in order:
             sum += product_list[i].price
-            tmp = f.write('%16d'%i,end='  |  ')
-            f.write(product_list[i]+'\n')
-        f.write('\n'+' '*18+'total: ￥ '+str(sum))
+            tmp = f.write(str('%16s'%i)+'  |  ')
+            tmp = f.write(str(product_list[i])+'\n')
+        tmp = f.write('\n'+' '*18+'total: $ '+str(sum))
     print(" Successfully print your receipt to ["+receiptfile+']')
 
 def receipt(order):
     cmd = input(' Successfully Billing. Do you want a RECEIPT?(y/n)')
+    print(' '+'-'*50)
     while(not cmd in ['y','n','']):
         cmd = input(" Please input 'y' or 'n' to print receipt or not.(y/n)")
     if cmd != 'n':
@@ -174,9 +175,10 @@ def cal():
                 if Len > 2:
                     invalid()
                     continue
-                delID = 19990801
+                delID = '19990801'
                 try:
-                    delID = int(cmd[1])
+                    tmp = int(cmd[1])
+                    delID = cmd[1]
                 except ValueError:
                     print('-'*10+"[ID] must be numbers"+'-'*10)
                     continue
@@ -211,9 +213,10 @@ def cal():
         if Len > 1:
             invalid()
             continue
-        addID = 19990523
+        addID = '19990523'
         try:
-            addID = int(cmd[0])
+            tmp = int(cmd[0])
+            addID = cmd[0]
         except ValueError:
             print('-'*10+"[ID] must be numbers"+'-'*10)
         if not addID in product_list.keys():
